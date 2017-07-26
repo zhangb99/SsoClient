@@ -1,0 +1,38 @@
+﻿@using Microsoft.AspNetCore.Authentication;
+@using SsoPortal;
+@{
+    ViewData["Title"] = "Secure";
+}
+<h2>@ViewData["Title"]</h2>
+
+<div>
+    <a asp-action="CallApiUsingUserAccessToken">Call API using user token</a>
+</div>
+<h3>Custom Claims</h3>
+<dl>
+    <dt>UserId</dt>
+    <dd>@User.GetClaimValue(PortalClaimTypes.UserId)</dd>
+
+    <dt>DefaultPatId</dt>
+    <dd>@User.GetClaimValue(PortalClaimTypes.DefaultPatId)</dd>
+
+    <dt>AvailablePatIds</dt>
+    <dd>@User.GetClaimValue(PortalClaimTypes.AvailablePatIds)</dd>
+
+    <dt>UserName</dt>
+    <dd>@User.GetClaimValue(PortalClaimTypes.LastName), @User.GetClaimValue(PortalClaimTypes.FirstName) @User.GetClaimValue(PortalClaimTypes.MiddleName)</dd>
+
+</dl>
+<h3>User claims</h3>
+<dl>
+    @foreach (var claim in User.Claims)
+    {
+        <dt>@claim.Type</dt>
+        <dd>@claim.Value</dd>
+
+    }
+    <dt>access token</dt>
+    <dd>@await ViewContext.HttpContext.Authentication.GetTokenAsync("access_token")</dd>
+    <dt>refresh token</dt>
+    <dd>@await ViewContext.HttpContext.Authentication.GetTokenAsync("refresh_token")</dd>
+</dl>
