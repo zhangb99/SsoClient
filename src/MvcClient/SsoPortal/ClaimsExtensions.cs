@@ -1,11 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Security.Principal;
 
 namespace SsoPortal
 {
+    public enum PortalClaimTypes
+    {
+        UserId,
+        DefaultPatId,
+        AvailablePatIds,
+        FirstName,
+        LastName,
+        MiddleName,
+        Role,
+        // App specific claim type
+        SelectedPatId,
+        PortalAccess
+    }
+
     public static class ClaimsExtensions
     {
         public static string GetClaimValue(this ClaimsPrincipal principal, PortalClaimTypes type)
@@ -38,16 +50,5 @@ namespace SsoPortal
             // add new claim
             identity.AddClaim(new Claim(type, value));
         }
-    }
-
-    public enum PortalClaimTypes
-    {
-        UserId,
-        DefaultPatId,
-        AvailablePatIds,
-        FirstName,
-        LastName,
-        MiddleName,
-        Role
     }
 }

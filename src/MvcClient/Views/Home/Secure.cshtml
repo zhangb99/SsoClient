@@ -22,6 +22,14 @@
     <dt>UserName</dt>
     <dd>@User.GetClaimValue(PortalClaimTypes.LastName), @User.GetClaimValue(PortalClaimTypes.FirstName) @User.GetClaimValue(PortalClaimTypes.MiddleName)</dd>
 
+    <dt>&nbsp;</dt>
+    <dd>App specific claims</dd>
+
+    <dt>Selected PatId</dt>
+    <dd>@User.GetClaimValue(PortalClaimTypes.SelectedPatId)</dd>
+
+    <dt>Portal Access</dt>
+    <dd>@User.GetClaimValue(PortalClaimTypes.PortalAccess)</dd>
 </dl>
 <h3>User claims</h3>
 <dl>

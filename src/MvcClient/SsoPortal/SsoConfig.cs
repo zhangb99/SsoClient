@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Builder;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace SsoPortal
 {
     public static class SsoConfig
     {
-        public static void UseSsoPortal(this IApplicationBuilder app)
+        public static void UseSsoPortal(this IApplicationBuilder app, IUserClaimService userClaimService)
         {
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
@@ -34,18 +37,19 @@ namespace SsoPortal
 
                 GetClaimsFromUserInfoEndpoint = true,
                 SaveTokens = true,
-                //Events = new OpenIdConnectEvents
-                //{
-                //    OnTicketReceived = context =>
-                //    {
-                //        context.Principal.Identities.First().UpdateClaims(
-                //            claimService.CustomClaims(
-                //                context.Principal.GetClaimValue(PortalClaimTypes.UserId),
-                //                context.Principal.GetClaimValue(PortalClaimTypes.DefaultPatId)));
+                Events = new OpenIdConnectEvents
+                {
+                    OnTicketReceived = context =>
+                    {
+                        var ci = context.Ticket.Principal.Identity as ClaimsIdentity;
 
-                //        return Task.CompletedTask;
-                //    }
-                //}
+                        ci.AddClaims(userClaimService.CheckProxyStatus(
+                            context.Ticket.Principal.GetClaimValue(PortalClaimTypes.UserId),
+                            context.Ticket.Principal.GetClaimValue(PortalClaimTypes.DefaultPatId)));
+
+                        return Task.FromResult(0);
+                    }
+                }
             });
         }
     }

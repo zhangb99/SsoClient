@@ -25,6 +25,7 @@ namespace MvcClient
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddScoped<IUserClaimService, UserClaimService>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
@@ -41,8 +42,8 @@ namespace MvcClient
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            // SsoPortal config, sso.
-            app.UseSsoPortal();
+            // SsoPortal config
+            app.UseSsoPortal(app.ApplicationServices.GetService<IUserClaimService>());
 
             app.UseStaticFiles();
             app.UseMvcWithDefaultRoute();
