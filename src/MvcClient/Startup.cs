@@ -41,7 +41,7 @@ namespace MvcClient
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            // SsoPortal config
+            // SsoPortal config, sso.
             app.UseSsoPortal();
 
             app.UseStaticFiles();
